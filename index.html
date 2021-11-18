@@ -1,0 +1,718 @@
+<html>
+<head>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+	</style>
+</head>
+<body>
+	<style>
+		body {
+			background: rgba(0, 0, 0, 0.1);
+			line-height: 1.45rem;
+			color: #444;
+			font-family: 'Montserrat', sans-serif;
+		}
+
+		body.freeze {
+			pointer-events: none;
+		}
+
+		h1 {
+			margin: 0;
+			margin-bottom: 2rem;
+			text-align: center;
+			font-weight: normal;
+			line-height: 2.2rem;
+		}
+
+		.section {
+			max-width: 500px;
+			padding: 4rem;
+			margin: 5vh auto 0 auto;
+			background: white;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+		}
+		.section:before {
+			content: "";
+			width: 100%;
+			background: #962c4c;
+			height: 170px;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: -1;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+		}
+
+		.form-instructions {
+			text-align: center;
+		}
+
+		form {
+			margin: 2rem auto;
+			width: 100%;
+			max-width: 330px;
+			will-change: transform;
+		}
+
+		.fieldgroup {
+			margin: 1.5rem 0;
+			position: relative;
+		}
+
+
+		label:hover {
+
+		}
+
+		input {
+			border: 1px solid #fff;
+			font-size: 1.2rem;
+			padding: 0.6rem;
+			padding-left: 0;
+			background: transparent;
+			border: none;
+			border-bottom: 2px solid #444;
+			transition: 0.2s;
+			width: calc(100% - .6rem);
+			max-width: 350px;
+			border-radius: 0;
+		}
+		input:focus {
+			outline: none;
+		}
+		input:valid {
+			border-color: #444;
+		}
+/*input:focus + label, input.hasInput + label {
+  top: -0.8rem;
+  font-size: 0.7rem;
+  }*/
+
+  .btn {
+  	color: #fff;
+  	background-color: #962c4c;
+  	padding: 0.8rem;
+  	font-size: 1.2rem;
+  	line-height: 1.2rem;
+  	border-radius: 5px;
+  	border: 2px solid transparent;
+  	min-width: 45px !important;
+  }
+  .btn:hover, .btn.hover {
+  	color: #fff;
+  	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  	transition: 0.2s;
+  }
+  .btn:active, .btn.active {
+  	color: #fff;
+  	background-color: #962c4c;
+  	box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+  	outline: 2px solid #962c4c;
+  }
+  .btn:focus, .btn.focus {
+  	color: #fff;
+  	outline: 2px solid #962c4c;
+  	outline-offset: 2px;
+  }
+  .btn:active:focus, .btn.active.focus {
+  	outline: 4px solid #962c4c;
+  }
+  .btn.hover, .btn.active {
+  	outline: none;
+  }
+
+  .btn-alt {
+  	background-color: transparent;
+  	color: #962c4c;
+  	border: 2px solid #962c4c;
+  }
+  .btn-alt:hover, .btn-alt.hover {
+  	background-color: transparent;
+  	color: #010a06;
+  	border-color: #010a06;
+  	text-shadow: none;
+  }
+  .btn-alt:focus, .btn-alt.focus {
+  	color: #962c4c;
+  }
+  .btn-alt:active, .btn-alt.active {
+  	color: #fff;
+  	background-color: #962c4c;
+  	text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.2);
+  }
+  .btn-alt.hover, .btn-alt.active {
+  	outline: none;
+  }
+
+  .buttons {
+  	display: flex;
+  }
+  .buttons .btn {
+  	margin-right: 15px;
+  }
+
+  form .btn {
+  	display: inline-block;
+  	width: 100%;
+  	max-width: 220px;
+  	margin: 4rem auto 0 auto;
+  }
+
+  [data-step="4"] button.btn {
+  	display: block;
+  	margin: 0 auto;
+  }
+
+  .form-progress {
+  	position: relative;
+  	display: block;
+  	margin: 3rem auto;
+  	width: 100%;
+  	max-width: 400px;
+  }
+
+  progress {
+  	display: block;
+  	position: relative;
+  	top: 5px;
+  	left: 5px;
+  	-webkit-appearance: none;
+  	-moz-appearance: none;
+  	appearance: none;
+  	background: #962c4c;
+  	width: 100%;
+  	height: 5px;
+  	background: none;
+  	transition: 1s;
+  	will-change: contents;
+  }
+  progress::-webkit-progress-bar {
+  	background-color: #ddd;
+  }
+  progress::-webkit-progress-value {
+  	background-color: #962c4c;
+  	-webkit-transition: all 0.5s ease-in-out;
+  	transition: all 0.5s ease-in-out;
+  }
+
+  .form-progress-indicator {
+  	position: absolute;
+  	top: -6px;
+  	left: 0;
+  	display: inline-block;
+  	width: 20px;
+  	height: 20px;
+  	background: white;
+  	border: 3px solid #ddd;
+  	border-radius: 50%;
+  	transition: all 0.2s ease-in-out;
+  	transition-delay: 0.3s;
+  	will-change: transform;
+  }
+  .form-progress-indicator.one {
+  	left: 0;
+  }
+  .form-progress-indicator.two {
+  	left: 33%;
+  }
+  .form-progress-indicator.three {
+  	left: 66%;
+  }
+  .form-progress-indicator.four {
+  	left: 100%;
+  }
+  .form-progress-indicator.active {
+  	-webkit-animation: bounce 0.5s forwards;
+  	animation: bounce 0.5s forwards;
+  	-webkit-animation-delay: 0.5s;
+  	animation-delay: 0.5s;
+  	border-color: #962c4c;
+  }
+
+  .animation-container {
+  	position: relative;
+  	width: 100%;
+  	transition: 0.3s;
+  	will-change: padding;
+  	overflow: hidden;
+  }
+
+  .form-step {
+  	position: absolute;
+  	transition: 1s ease-in-out;
+  	transition-timing-function: ease-in-out;
+  	will-change: transform, opacity;
+  	width: 100%;
+  }
+
+  .form-step.leaving {
+  	-webkit-animation: left-and-out 0.5s forwards;
+  	animation: left-and-out 0.5s forwards;
+  }
+
+  .form-step.waiting {
+  	transform: translateX(400px);
+  }
+
+  .form-step.coming {
+  	-webkit-animation: right-and-in 0.5s forwards;
+  	animation: right-and-in 0.5s forwards;
+  }
+
+  @-webkit-keyframes left-and-out {
+  	100% {
+  		opacity: 0;
+  		transform: translateX(-400px);
+  	}
+  }
+
+  @keyframes left-and-out {
+  	100% {
+  		opacity: 0;
+  		transform: translateX(-400px);
+  	}
+  }
+  @-webkit-keyframes right-and-in {
+  	100% {
+  		opacity: 1;
+  		transform: translateX(0);
+  	}
+  }
+  @keyframes right-and-in {
+  	100% {
+  		opacity: 1;
+  		transform: translateX(0);
+  	}
+  }
+  @-webkit-keyframes bounce {
+  	50% {
+  		transform: scale(1.5);
+  	}
+  	100% {
+  		transform: scale(1);
+  	}
+  }
+  @keyframes bounce {
+  	50% {
+  		transform: scale(1.5);
+  	}
+  	100% {
+  		transform: scale(1);
+  	}
+  }
+  .sr-only {
+  	position: absolute;
+  	width: 1px;
+  	height: 1px;
+  	padding: 0;
+  	margin: -1px;
+  	overflow: hidden;
+  	clip: rect(0, 0, 0, 0);
+  	border: 0;
+  }
+
+  .hidden {
+  	display: none;
+  }
+
+  input[type="checkbox"] {
+  	float: left;
+  	width: auto;
+  	margin-right: 5px;
+  }
+
+  legend {
+  	font-weight: bold;
+  }
+
+</style>
+
+<section class="section">
+	<h1>
+		<img src = "https://dla.maf.ae/static/media/dla-logo.ed8da8f1.svg"/> <br><br>
+	Access Identifier</h1>
+
+	<div class="form-progress">
+		<progress class="form-progress-bar" min="0" max="100" value="0" step="33" aria-labelledby="form-progress-completion"></progress>
+		
+		<div class="form-progress-indicator one active"></div>
+		<div class="form-progress-indicator two"></div>
+		<div class="form-progress-indicator three"></div>
+		<div class="form-progress-indicator four"></div>
+		
+		<p id="form-progress-completion" class="js-form-progress-completion sr-only" aria-live="polite">0% complete</p>
+	</div>
+	
+	
+	<div class="animation-container">
+		<!-- Step one -->
+		<div class="form-step js-form-step" data-step="1">
+
+			<p class="form-instructions"><strong>Which features do you want access to?</strong><br>
+				This will determine the level of access you need in DLA.
+			</p>
+
+			<form action="" name="form-step-1" id="firstForm">
+				<div class="fieldgroup">
+					<legend>Basic application features</legend>
+					<input type="checkbox" id="createaudience" name="createaudience" class = "accessLevelF"> <label for="createaudience">Create Audience using attributes</label>   <br> 
+					<input type="checkbox" id="uploadaudience" name="uploadaudience" class = "accessLevelF"> <label for="uploadaudience">Upload Audience using CSV</label>   <br>
+
+
+				</div>
+				<div class="fieldgroup">
+					<legend>Administrative features</legend>
+					<input type="checkbox" id="approveaudience" name="approveaudience" class = "accessLevelF"> <label for="approveaudience">Approve Created Audiences</label>   <br> 
+					<input type="checkbox" id="editaudiences" name="editaudiences" class = "accessLevelF"> <label for="editaudiences">Edit Audiences of others</label>   <br>
+
+
+				</div>
+
+				<div class="fieldgroup">
+					<legend>Only want read only access? Check this:</legend>
+					<input type="checkbox" id="readonly" name="readonly" class = "accessLevelF"> <label for="readonly">Read Only</label>   <br> 
+
+
+
+				</div>
+
+				<div class="buttons">
+					<button type="button" class="btn btn-alt js-reset">Reset</button>
+
+					<button type="submit" class="btn">Continue</button>
+				</div>
+
+			</form>
+
+		</div>
+		
+		<!-- Step two -->
+		<div class="form-step js-form-step waiting hidden" data-step="2">
+
+			<p class="form-instructions"><strong>Select the BUs you want access to...</strong>
+				<br> These correspond to your Braze app groups. Please ensure you're asking for only the right BU level access.</p>
+
+				<form action="" name="form-step-2">
+					<div class="fieldgroup buselections">
+						<legend>BUs</legend>
+						<input type='checkbox' id='fashionlifestyle' name='FSN' > <label for='fashionlifestyle'>Fashion & Lifestyle(FSN)</label>   <br> 
+<input type='checkbox' id='financial' name='FIN' > <label for='financial'>Financial(FIN)</label>   <br> 
+<input type='checkbox' id='carrefour' name='CRF' > <label for='carrefour'>Carrefour(CRF)</label>   <br> 
+<input type='checkbox' id='share' name='SHR' > <label for='share'>Share(SHR)</label>   <br> 
+<input type='checkbox' id='shoppingmall' name='SMB' > <label for='shoppingmall'>Shopping Mall(SMB)</label>   <br> 
+<input type='checkbox' id='leisureentertainmentcinemas' name='LEC' > <label for='leisureentertainmentcinemas'>Leisure, Entertainment & Cinemas(LEC)</label>   <br> 
+						<br>
+						<legend>Do you also need a cross BU access?</legend>
+						<p style="font-size: .7rem;margin-top: 0px;line-height: 1;">Cross BU access allows you to run campaigns for customers across the BUs.</p>
+						<input type='checkbox' id='xbu' name='XBU' > <label for='xbu'>Cross BU(XBU)</label>   <br> 
+
+
+					</div>
+					<div class="buttons">
+								<button type="button" class="btn btn-alt js-reset">Reset</button>
+
+								<button type="submit" class="btn">Continue</button>
+						</div>
+				</form>
+
+			</div>
+
+
+
+			<!-- Step three -->
+			<div class="form-step js-form-step waiting hidden" data-step="3">
+
+				<p class="form-instructions"><strong>Enter Your Email(s)</strong>
+					<br> Provide your MAF Email ID(s). If you're providing more than 1 email, please separate by commas.</p>
+
+					<form action="" name="form-step-3">
+						<div class="fieldgroup">
+							<input type="text" name="emails" id="emails" />
+							<label for="emails">Email IDs</label>
+						</div>
+
+						<div class="buttons">
+							<button type="button" class="btn btn-alt js-reset">Reset</button>
+
+							<button type="submit" class="btn pre-finalButton">Continue</button>
+						</div>
+					</form>
+
+				</div>
+
+
+
+				<!-- Step four -->
+				<div class="form-step js-form-step waiting hidden" style = "text-align: center;" data-step="4">
+
+					<p class="form-instructions">
+						<strong>Your access level is...</strong>
+						<br> 
+						<span class="accessLevels"> </span>
+					</p>
+						<legend>
+							Please raise a ticket <a href="https://mafp.service-now.com/sp?id=sc_cat_item&sys_id=87efc574dbeee20019927e400f961903&referrer=popular_items">here</a> with the below content:
+
+						</legend>
+						<br>
+						<p id="finalContent" style="font-size: .8rem; text-align: center;">
+								This is a long long text <br>
+								This is a long long text <br>
+								This is a long long text <br>
+								This is a long long text <br>
+								This is a long long text <br>
+								This is a long long text <br>
+								This is a long long text <br>
+								This is a long long text <br>
+								This is a long long text <br>
+								This is a long long text <br>
+								This is a long long text <br>
+
+						</p>
+
+						<div class="buttons">
+							<button type="button" class="btn btn-alt js-reset">Reset</button>
+						</div>
+					</div>
+				</div>
+			</section>
+
+
+<script>
+
+
+
+var $body = $('body');
+var $progressBar = $('progress');
+var $animContainer = $('.animation-container');
+var value = 0;
+var transitionEnd = 'webkitTransitionEnd transitionend';
+
+
+/**
+ * Resets the form back to the default state.
+ * ==========================================
+ */
+ function formReset() {
+ 	value = 0;
+ 	$progressBar.val(value);
+ 	$('form input').not('button').val('').removeClass('hasInput');
+ 	$('.js-form-step').removeClass('left leaving');
+ 	$('.js-form-step').not('.js-form-step[data-step="1"]').addClass('hidden waiting');
+ 	$('.js-form-step[data-step="1"]').removeClass('hidden');
+ 	$('.form-progress-indicator').not('.one').removeClass('active');
+
+ 	$animContainer.css({
+ 		'paddingBottom': $('.js-form-step[data-step="1"]').height() + 'px'
+ 	});
+ 	$("input[type = 'checkbox']").prop('checked',false);
+
+ 	console.warn('Form reset.');
+ 	return false;
+ }
+
+
+/**
+ * Sets up the click handlers on the form. Next/reset.
+ * ===================================================
+ */
+ function setupClickHandlers() {
+
+	// Show next form on continue click
+	$('button[type="submit"]').on('click', function(event) {
+		event.preventDefault();
+		var $currentForm = $(this).parents('.js-form-step');
+		showNextForm($currentForm);
+	});
+
+	// Reset form on reset button click
+	$('.js-reset').on('click', function() {
+		formReset();
+	});
+	
+	return false;
+}
+
+function readOnlyHandler(){
+	$('.accessLevelF').click(function(e,i){
+		console.log($(e.target).prop('checked'))
+		console.log($(e.target).prop('name'))
+
+		if($(e.target).prop('checked') == 1 && $(e.target).prop('name') == "readonly"){
+
+            //we've to reset the rest
+            $('input#createaudience').prop('checked', false);
+            $('input#uploadaudience').prop('checked', false);
+            $('input#approveaudience').prop('checked', false);
+            $('input#editaudiences').prop('checked', false);
+        }
+        else{ // it's a click on some other button
+        	if ($('input#readonly').prop('checked') == true){
+        		$('input#readonly').prop('checked', false);
+        	}	
+        }
+
+    });
+}
+
+/**
+ * Shows the next form.
+ * @param - Node - The current form.
+ * ======================================
+ */
+ function showNextForm($currentForm) {
+ 	var currentFormStep = parseInt($currentForm.attr('data-step')) || false;
+ 	var $nextForm = $('.js-form-step[data-step="' + (currentFormStep + 1) + '"]');
+
+ 	console.log('Current step is ' + currentFormStep);
+ 	console.log('The next form is # ' + $nextForm.attr('data-step'));
+
+ 	$body.addClass('freeze');
+
+	// Ensure top of form is in view
+	$('html, body').animate({
+		scrollTop : $progressBar.offset().top
+	}, 'fast');
+
+	// Hide current form fields
+	$currentForm.addClass('leaving');
+	setTimeout(function() {
+		$currentForm.addClass('hidden');
+	}, 500);
+	
+	// Animate container to height of form
+	$animContainer.css({
+		'paddingBottom' : $nextForm.height() + 'px'
+	});  
+
+	// Show next form fields
+	$nextForm.removeClass('hidden')
+	.addClass('coming')
+	.one(transitionEnd, function() {
+		$nextForm.removeClass('coming waiting');
+	});
+
+	// Increment value (based on 4 steps 0 - 100)
+	value += 33;
+
+	// Reset if we've reached the end
+	if (value >= 100) {
+		formReset();
+	} else {
+		$('.form-progress')
+		.find('.form-progress-indicator.active')
+		.next('.form-progress-indicator')
+		.addClass('active');
+
+		// Set progress bar to the next value
+		$progressBar.val(value);
+	}
+
+	// Update hidden progress descriptor (for a11y)
+	$('.js-form-progress-completion').html($progressBar.val() + '% complete');
+
+	
+
+	$body.removeClass('freeze');
+
+	return false;
+}
+
+/**
+ * Sets up and handles the float labels on the inputs.
+ =====================================================
+ */
+ function setupFloatLabels() {
+	// Check the inputs to see if we should keep the label floating or not
+	$('form input').not('button').on('blur', function() {
+
+		// Different validation for different inputs
+		switch (this.tagName) {
+			case 'SELECT':
+			if (this.value > 0) {
+				this.className = 'hasInput';
+			} else {
+				this.className = '';
+			}
+			break;
+
+			case 'INPUT':
+			if (this.value !== '') {
+				this.className = 'hasInput';
+			} else {
+				this.className = '';
+			}
+			break;
+
+			default:
+			break;
+		}
+	});
+	
+	return false;
+}
+
+function prepareTheContent(){
+  $(".pre-finalButton").click(function(){
+  	//the pre-final button has been pressed. Time to populate it with data
+
+  	//first identify the access levels:
+  	var marketeerAccess = $('input#createaudience').prop('checked') || $('input#uploadaudience').prop('checked');
+  	var adminAccess = $('input#approveaudience').prop('checked') || $('input#editaudiences').prop('checked');
+  	var readonly = $('input#readonly').prop('checked');
+  	var actualAccessLevel = "";
+  	console.log(marketeerAccess + " " + adminAccess + " " + readonly + " " + actualAccessLevel)
+
+  	if(readonly == 0 && adminAccess == 1){
+  		actualAccessLevel = "ADMIN";
+  	}
+  	else if (readonly == 0 && marketeerAccess == 1){
+  		actualAccessLevel = "MARKETEER";
+  	}
+  	else if (readonly == 1){
+  		actualAccessLevel = "READ_ONLY"; 
+  	}
+  	console.log(actualAccessLevel)
+  	//get the bus
+  	var accesses = new Array;
+  	var accessString = "";
+
+  	$(".buselections > input").each(function(e,i){
+
+  		if($(i).prop('checked') == 1){ //this is ticked
+  			accesses.push("DLA_" + actualAccessLevel +"_"+  $(i).prop('name') );
+  			accessString += "DLA_" + actualAccessLevel +"_"+  $(i).prop('name') + ", ";
+  		}
+
+  	});
+
+  	accessString = accessString.substr(0,accessString.length - 2);
+  	
+  	$(".accessLevels").text(accessString);
+  	var emails = $("#emails").val();
+  	$("#finalContent").html("Please add the following AD groups for the emails: <br> <b>" + emails + " </b> <br> the AD Group(s): <br> <b>" + accessString + "</b> <br> Thanks!");
+
+
+  });
+
+
+}
+
+
+/**
+ * Gets the party started.
+ * =======================
+ */
+ function init() {
+ 	formReset();
+ 	setupFloatLabels();
+ 	setupClickHandlers();
+ 	readOnlyHandler();
+ 	prepareTheContent();
+ }
+
+ init();
+</script>
+</body>
